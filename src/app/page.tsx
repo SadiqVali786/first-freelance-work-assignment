@@ -1,103 +1,142 @@
+"use client";
+
+import { cn } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
+import { Dispatch, SetStateAction, useState } from "react";
+import { CiLocationOn } from "react-icons/ci";
+import { LuArrowUpRight } from "react-icons/lu";
+
+function ExpandedText({
+  currentlyActiveCard,
+  index,
+}: {
+  currentlyActiveCard: number;
+  index: number;
+}) {
+  return (
+    <div
+      className={cn(
+        "absolute bottom-8 space-y-3 max-w-[20rem] px-4 lg:pl-18 overflow-hidden transition-all duration-500 ease-in-out",
+        currentlyActiveCard === index
+          ? "opacity-100"
+          : "opacity-100 md:opacity-0"
+      )}
+    >
+      <div className="flex gap-x-1 items-center">
+        <CiLocationOn className="text-[#e5ed65] font-extrabold text-2xl" />
+        <Link
+          href="https://demo2.wpopal.com/spaciaz/project-location/new-york-ny/"
+          rel="tag"
+          className="text-white font-bold hover:text-[#e5ed65]/90"
+        >
+          New York, NY
+        </Link>
+      </div>
+      <hr />
+      <h4 className="text-white font-bold text-4xl hover:text-[#e5ed65]">
+        <a href="https://demo2.wpopal.com/spaciaz/projects/mixed-use-development/">
+          Mixed-Use Development
+        </a>
+      </h4>
+      <div className="group hover:bg-[#e5ed65] bg-white rounded-full max-w-fit px-8 py-4">
+        <Link
+          className="project-button"
+          href="https://demo2.wpopal.com/spaciaz/projects/mixed-use-development/"
+        >
+          <div className="flex items-center gap-x-4 relative min-w-[9.5rem] ">
+            <span className="font-bold">Explore Project</span>
+            <div className="rounded-full w-12 h-12 bg-[#e5ed65] group-hover:bg-white absolute -right-6 flex justify-center items-center">
+              {/* First arrow - moves up-right on hover (45°) */}
+              <LuArrowUpRight className="text-2xl font-extrabold transition-all duration-300 group-hover:-translate-y-4 group-hover:translate-x-4 group-hover:opacity-0 opacity-100 absolute" />
+
+              {/* Second arrow - comes in from bottom-left on hover (45° path) */}
+              <LuArrowUpRight className="text-2xl font-extrabold opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 -translate-x-4 group-hover:translate-y-0 group-hover:translate-x-0" />
+            </div>
+          </div>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function SingleCard({
+  currentlyActiveCard,
+  setCurrentlyActiveCard,
+  index,
+}: {
+  currentlyActiveCard: number;
+  setCurrentlyActiveCard: Dispatch<SetStateAction<number>>;
+  index: number;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative transition-all duration-500 ease-in-out rounded-3xl h-96 md:h-full",
+        currentlyActiveCard === index
+          ? "w-full md:w-[37.5%]"
+          : "w-full md:w-[12.5%]"
+      )}
+      onMouseEnter={() => setCurrentlyActiveCard(index)}
+    >
+      <Image
+        alt="alt"
+        src="https://demo2.wpopal.com/spaciaz/wp-content/uploads/2025/04/project_13.jpg"
+        className="object-cover h-full w-full opacity-50 rounded-3xl"
+        fill
+      />
+      <p
+        className={cn(
+          "absolute bottom-8 left-1/2 -translate-x-1/2 text-4xl [writing-mode:vertical-rl] rotate-180 text-white font-extrabold transition-all duration-500 ease-in-out max-h-[12rem]",
+          currentlyActiveCard === index
+            ? "opacity-0"
+            : "opacity-0 md:opacity-100"
+        )}
+      >
+        Mixed-use Development
+      </p>
+      <ExpandedText currentlyActiveCard={currentlyActiveCard} index={index} />
+    </div>
+  );
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [currentlyActiveCard, setCurrentlyActiveCard] = useState<number>(0);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  return (
+    <div className="min-h-screen flex justify-center items-center bg-black overflow-hidden px-4">
+      <div className="flex flex-col  md:flex-row gap-x-2 gap-y-6 max-w-[1730px] w-full md:h-[40rem] mx-auto my-4">
+        <SingleCard
+          currentlyActiveCard={currentlyActiveCard}
+          setCurrentlyActiveCard={setCurrentlyActiveCard}
+          index={0}
+        />
+        <SingleCard
+          currentlyActiveCard={currentlyActiveCard}
+          setCurrentlyActiveCard={setCurrentlyActiveCard}
+          index={1}
+        />
+        <SingleCard
+          currentlyActiveCard={currentlyActiveCard}
+          setCurrentlyActiveCard={setCurrentlyActiveCard}
+          index={2}
+        />
+        <SingleCard
+          currentlyActiveCard={currentlyActiveCard}
+          setCurrentlyActiveCard={setCurrentlyActiveCard}
+          index={3}
+        />
+        <SingleCard
+          currentlyActiveCard={currentlyActiveCard}
+          setCurrentlyActiveCard={setCurrentlyActiveCard}
+          index={4}
+        />
+        <SingleCard
+          currentlyActiveCard={currentlyActiveCard}
+          setCurrentlyActiveCard={setCurrentlyActiveCard}
+          index={5}
+        />
+      </div>
     </div>
   );
 }
